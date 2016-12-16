@@ -2,10 +2,12 @@ package gojsonschema
 
 import (
 	"bytes"
+	"sync"
 	"text/template"
 )
 
 var errorTemplates *template.Template
+var templateLock sync.Mutex
 
 type (
 	// RequiredError. ErrorDetails: property string
@@ -242,7 +244,9 @@ func formatErrorDescription(s string, details ErrorDetails) string {
 	var err error
 
 	if errorTemplates == nil {
+		templateLock.Lock()
 		errorTemplates = template.New("all-errors")
+		templateLock.Unlock()
 	}
 
 	tpl = errorTemplates.Lookup(s)
