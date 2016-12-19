@@ -255,8 +255,8 @@ func formatErrorDescription(s string, details ErrorDetails) string {
 	if tpl == nil {
 		templateLock.Lock()
 		tpl = errorTemplates.New(s)
-		templateLock.Unlock()
 		tpl, err = tpl.Parse(s)
+		templateLock.Unlock()
 		if err != nil {
 			return err.Error()
 		}
